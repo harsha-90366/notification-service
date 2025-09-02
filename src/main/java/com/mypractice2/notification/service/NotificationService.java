@@ -21,11 +21,10 @@ public class NotificationService {
 
     public void sendNotification(TemplateDTO templateDTO) {
 
-        if(checkIfTemplateIdIsNull(templateDTO.getTemplateId())|| checkIfTemplateIdExists(templateDTO.getTemplateId())) {
+        if (checkIfTemplateIdIsNull(templateDTO.getTemplateId())||checkIfTemplateIdDoesNotExists(templateDTO.getTemplateId())) {
             log.error("Template ID cannot be null or Template ID does not exist");
             throw new IllegalArgumentException("Template ID cannot be null or Template ID does not exist");
-        }
-        else {
+        } else {
 
             Map<String, String> placeholders = templateDTO.getTemplatePlaceHolders();
             SimpleMailMessage message = new SimpleMailMessage();
@@ -39,10 +38,11 @@ public class NotificationService {
         }
     }
 
-    public boolean checkIfTemplateIdIsNull(Integer templateId) {
-        return templateId!=null;
+    public boolean checkIfTemplateIdIsNull(int templateId) {
+        return templateId <= 0;
     }
-    public boolean checkIfTemplateIdExists(Integer templateId) {
+
+    public boolean checkIfTemplateIdDoesNotExists(int templateId) {
         return templateRepository.findByTemplateId(templateId).isEmpty();
     }
 }
